@@ -18,7 +18,7 @@ const DocumentBankScreen = ({ navigation }: any) => {
 
   return (
     <View style={[styles.container, themeStyles.container]}>
-      {/* Appbar with Back Arrow */}
+     
       <Appbar.Header style={[themeStyles.appbar, { paddingTop: 0 }]}>
         <MaterialCommunityIcons
           name="arrow-left"
@@ -29,7 +29,7 @@ const DocumentBankScreen = ({ navigation }: any) => {
         />
       </Appbar.Header>
 
-      {/* Document Upload Section */}
+    
       <View style={themeStyles.topSection}>
         <TouchableOpacity onPress={handleImageUpload}>
           <Image
@@ -43,7 +43,7 @@ const DocumentBankScreen = ({ navigation }: any) => {
         </Text>
       </View>
 
-      {/* Bottom Section */}
+     
       <View style={themeStyles.bottomSection}>
         <View style={themeStyles.buttonRow}>
           <TouchableOpacity>

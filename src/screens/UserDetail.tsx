@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
+import { theme, isDarkTheme } from '../Redux/AuthSlice'; // Importing theme from Redux
+import { Colors } from '../constants/Colors';
 
 const UserDetailScreen = ({ navigation }: any) => {
+  
+
+  const colorScheme = useColorScheme();
+  const dispatch = useDispatch();
+  const isDarkMode = useSelector(isDarkTheme);
+
+  useEffect(() => {
+    dispatch(theme(colorScheme)); 
+  }, [colorScheme, dispatch]);
+
   const user = {
     name: "John Doe",
     phone: "+91 223 344 4454",
@@ -11,57 +24,49 @@ const UserDetailScreen = ({ navigation }: any) => {
     otherDetails: "Loan Status: Applied\nCredit Score: 750\nLoan Amount: ₹1,00,000",
   };
 
-  const colorScheme = useColorScheme();
 
-  const themeColors = {
-    background: colorScheme === 'dark' ? '#121212' : '#fff',
-    text: colorScheme === 'dark' ? '#fff' : '#000',
-    accent: colorScheme === 'dark' ? '#1E90FF' : '#007BFF',
-    cardBackground: colorScheme === 'dark' ? '#333' : '#dad9d9',
-    cardText: colorScheme === 'dark' ? '#ccc' : '#333',
-    buttonBackground: colorScheme === 'dark' ? '#1E90FF' : '#007BFF',
-    buttonText: '#fff',
-  };
+
 
   return (
-    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
+    <View style={[styles.container, { backgroundColor: isDarkMode ? Colors.darkBackground : Colors.lightBackground }]}>
       <View style={[styles.topSection]}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon
             name="arrow-left"
             size={30}
-            color={themeColors.text}
+            color={isDarkMode ? Colors.white : Colors.black}
             style={styles.backIcon}
           />
         </TouchableOpacity>
-        <Text style={[styles.heading, { color: themeColors.accent }]}>User Details</Text>
+        <Text style={[styles.heading, { color: isDarkMode ? Colors.accent : Colors.primary }]}>User Details</Text>
       </View>
 
-      <View style={[styles.infoSection, { backgroundColor: themeColors.cardBackground }]}>
-        <Text style={[styles.userName, { color: themeColors.accent }]}>{user.name}</Text>
-        <Text style={[styles.phoneNumber, { color: themeColors.accent }]}>{user.phone}</Text>
+      <View style={[styles.infoSection, { backgroundColor: isDarkMode ? Colors.darkInputBackground : Colors.lightInputBackground }]}>
+        <Text style={[styles.userName, { color: isDarkMode ? Colors.accent : Colors.primary }]}>{user.name}</Text>
+        <Text style={[styles.phoneNumber, { color: isDarkMode ? Colors.accent : Colors.primary }]}>{user.phone}</Text>
 
         <View style={styles.detailsSection}>
-          <Text style={[styles.detailsLabel, { color: themeColors.accent }]}>Email Address:</Text>
-          <Text style={[styles.detailsText, { color: themeColors.cardText }]}>{user.email}</Text>
+          <Text style={[styles.detailsLabel, { color: isDarkMode ? Colors.accent : Colors.primary }]}>Email Address:</Text>
+          <Text style={[styles.detailsText, { color: isDarkMode ? Colors.lightGray : Colors.gray }]}>{user.email}</Text>
 
-          <Text style={[styles.detailsLabel, { color: themeColors.accent }]}>Aadhar/PAN Number:</Text>
-          <Text style={[styles.detailsText, { color: themeColors.cardText }]}>{user.aadharOrPan}</Text>
+          <Text style={[styles.detailsLabel, { color: isDarkMode ? Colors.accent : Colors.primary }]}>Aadhar/PAN Number:</Text>
+          <Text style={[styles.detailsText, { color: isDarkMode ? Colors.lightGray : Colors.gray }]}>{user.aadharOrPan}</Text>
 
-          <Text style={[styles.detailsLabel, { color: themeColors.accent }]}>Other Details:</Text>
-          <Text style={[styles.detailsText, { color: themeColors.cardText }]}>{user.otherDetails}</Text>
+          <Text style={[styles.detailsLabel, { color: isDarkMode ? Colors.accent : Colors.primary }]}>Other Details:</Text>
+          <Text style={[styles.detailsText, { color: isDarkMode ? Colors.lightGray : Colors.gray }]}>{user.otherDetails}</Text>
         </View>
       </View>
 
       <TouchableOpacity
-        style={[styles.backButton, { backgroundColor: themeColors.buttonBackground }]}
+        style={[styles.backButton, { backgroundColor: isDarkMode ? Colors.accent : Colors.primary }]}
         onPress={() => { navigation.navigate('BankDetail') }}
       >
-        <Text style={[styles.backButtonText, { color: themeColors.buttonText }]}>Forward</Text>
+        <Text style={[styles.backButtonText, { color: Colors.white }]}>Forward</Text>
       </TouchableOpacity>
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

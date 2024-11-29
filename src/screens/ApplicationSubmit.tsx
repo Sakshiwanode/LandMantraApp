@@ -9,7 +9,7 @@ const ApplicationSubmitScreen = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
-      {/* Appbar with back arrow */}
+    
       <Appbar.Header style={styles.appbar}>
         <MaterialCommunityIcons
           name="arrow-left"
@@ -30,7 +30,7 @@ const ApplicationSubmitScreen = ({ navigation }: any) => {
 
       <View style={styles.bottomSection}>
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Next Steps</Text>
+          <Text style={styles.buttonText} onPress={()=>(navigation.navigate('TabNavigator'))}>Next Steps</Text>
         </TouchableOpacity>
       </View>
     </View>

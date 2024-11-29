@@ -1,47 +1,102 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, StatusBar, useColorScheme } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  StatusBar,
+} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { useColorScheme } from 'react-native';
+import { theme, isDarkTheme } from '../Redux/AuthSlice';
 import { Appbar } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Colors, FontSize } from '../constants/Colors';
 
-const LoanScreen = ({ navigation }: { navigation: any }) => {
+const LoanApplyScreen = ({ navigation }: any) => {
   const [loanAmount, setLoanAmount] = useState(40000);
   const maxLoan = 500000;
+  const dispatch = useDispatch();
+  const systemColorScheme = useColorScheme();
+  const isDarkMode = useSelector(isDarkTheme);
 
-  const colorScheme = useColorScheme();
-  const theme: any = colorScheme === 'dark' ? styles.darkTheme : styles.lightTheme;
+  useEffect(() => {
+    dispatch(theme(systemColorScheme));
+  }, [systemColorScheme, dispatch]);
 
   return (
-    <View style={[styles.container, theme.container]}>
-      <StatusBar hidden={true} />
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: isDarkMode ? Colors.black : Colors.white },
+      ]}
+    >
+      <StatusBar hidden />
 
-      {/* Appbar with Back Icon */}
-      <Appbar style={styles.appbar}>
+      <Appbar.Header
+        style={[
+          styles.header,
+          { backgroundColor: isDarkMode ? Colors.darkGray : Colors.lightGray },
+        ]}
+      >
         <Appbar.Action
-          icon="arrow-left"
+          icon={() => (
+            <Icon
+              name="arrow-left"
+              size={24}
+              color={isDarkMode ? Colors.white : Colors.black}
+            />
+          )}
           onPress={() => navigation.goBack()}
-          color="white" // Icon color
-          style={styles.backIcon} // No background
         />
-      </Appbar>
+      </Appbar.Header>
 
-      <View style={[styles.topSection, theme.topSection]}>
+      <View style={styles.topSection}>
         <Image
           source={require('../images/loanimage.png')}
           style={styles.image}
-          resizeMode="cover"
+          resizeMode="contain"
         />
       </View>
 
-      <View style={[styles.bottomSection, theme.bottomSection]}>
-        <Text style={[styles.heading, theme.heading]}>Select Loan Amount</Text>
-        <Text style={[styles.subText, theme.subText]}>
-          Move to effortless site to select your loans easily
+      <View
+        style={[
+          styles.bottomSection,
+          {
+            backgroundColor: isDarkMode
+              ? Colors.darkBackground
+              : Colors.lightBackground,
+          },
+        ]}
+      >
+        <Text
+          style={[
+            styles.mainHeading,
+            { color: isDarkMode ? Colors.accent : Colors.primary },
+          ]}
+        >
+          Select Loan Amount
+        </Text>
+        <Text
+          style={[
+            styles.subHeading,
+            { color: isDarkMode ? Colors.white : Colors.secondary },
+          ]}
+        >
+          Enter the loan amount you wish to apply for
         </Text>
 
         <View style={styles.inputContainer}>
-          <Text style={[styles.currencySymbol, theme.currencySymbol]}>₹</Text>
+          <Text style={[styles.currencySymbol, { color: isDarkMode ? Colors.accent : Colors.primary }]}>
+            ₹
+          </Text>
           <TextInput
-            style={[styles.loanInput, theme.loanInput]}
+            style={[
+              styles.loanInput,
+              { color: isDarkMode ? Colors.accent : Colors.primary },
+            ]}
             keyboardType="numeric"
             value={String(loanAmount)}
             onChangeText={(text) => {
@@ -54,28 +109,65 @@ const LoanScreen = ({ navigation }: { navigation: any }) => {
         </View>
 
         <View style={styles.progressContainer}>
-          <Text style={[styles.progressText, theme.progressText]}>₹100</Text>
+          <Text style={[styles.progressText, { color: isDarkMode ? Colors.accent : Colors.primary }]}>₹100</Text>
           <View style={styles.progressBarWrapper}>
-            <View style={[styles.progressBar, { width: `${(loanAmount / maxLoan) * 100}%` }]} />
+            <View
+              style={[
+                styles.progressBar,
+                { width: `${(loanAmount / maxLoan) * 100}%` },
+              ]}
+            />
           </View>
-          <Text style={[styles.progressText, theme.progressText]}>₹{maxLoan.toLocaleString()}</Text>
+          <Text style={[styles.progressText, { color: isDarkMode ? Colors.accent : Colors.primary }]}>
+            ₹{maxLoan.toLocaleString()}
+          </Text>
         </View>
 
-        <Text style={[styles.heading, theme.heading]}>Select Loan Tenure</Text>
-        <Text style={[styles.subText, theme.subText]}>Choose your loan in terms of months, year</Text>
+        <Text
+          style={[
+            styles.mainHeading,
+            { color: isDarkMode ? Colors.accent : Colors.primary },
+          ]}
+        >
+          Select Loan Tenure
+        </Text>
+        <Text
+          style={[
+            styles.subHeading,
+            { color: isDarkMode ? Colors.white : Colors.secondary },
+          ]}
+        >
+          Choose your loan in terms of months, year
+        </Text>
         <View style={styles.tenureContainer}>
-          <Text style={theme.tenureText}>2 Years</Text>
-          <Icon name="chevron-down" size={16} color="rgba(0, 0, 0, 0.5)" />
+          <Text style={styles.tenureText}>2 Years</Text>
+          <Icon name="chevron-down" size={28} color="rgba(0, 0, 0, 0.5)" />
         </View>
 
         <TouchableOpacity
-          style={[styles.continueButton, theme.continueButton]}
+          style={[
+            styles.continueButton,
+            {
+              backgroundColor: isDarkMode ? Colors.accent : Colors.primary,
+            },
+          ]}
           onPress={() => navigation.navigate('AadharVerify')}
         >
-          <Text style={styles.buttonText}>Continue to Apply</Text>
+          <Text
+            style={[styles.buttonText, { color: isDarkMode ? Colors.black : Colors.white }]}
+          >
+            Continue to Apply
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => console.log('Cancel')}>
-          <Text style={[styles.cancelText, theme.cancelText]}>Cancel</Text>
+          <Text
+            style={[
+              styles.cancelText,
+              { color: isDarkMode ? Colors.accent : Colors.primary },
+            ]}
+          >
+            Cancel
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -86,17 +178,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  appbar: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'transparent', // Transparent appbar
-    elevation: 0, // No shadow
-    zIndex: 1, // Ensure it's above the image
-  },
-  backIcon: {
-    backgroundColor: 'transparent', // No background for the icon
+  header: {
+    backgroundColor: 'transparent',
+    elevation: 0,
   },
   topSection: {
     flex: 0.4,
@@ -106,7 +190,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    opacity: 0.8,
   },
   bottomSection: {
     flex: 0.6,
@@ -114,20 +197,20 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     padding: 20,
   },
-  heading: {
-    fontSize: 22,
+  mainHeading: {
+    fontSize: FontSize.xLarge,
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  subText: {
-    fontSize: 14,
+  subHeading: {
+    fontSize: FontSize.medium,
     paddingLeft: 10,
     marginBottom: 20,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.2)',
@@ -135,12 +218,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   currencySymbol: {
-    fontSize: 18,
+    fontSize: FontSize.large,
     fontWeight: 'bold',
     marginRight: 5,
   },
   loanInput: {
-    fontSize: 18,
+    fontSize: FontSize.large,
     fontWeight: 'bold',
     flex: 1,
   },
@@ -149,7 +232,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 20,
-    marginTop: 10,
   },
   progressBarWrapper: {
     flex: 1,
@@ -164,7 +246,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#007BFF',
   },
   progressText: {
-    fontSize: 12,
+    fontSize: FontSize.medium,
   },
   tenureContainer: {
     flexDirection: 'row',
@@ -178,52 +260,24 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   tenureText: {
-    fontSize: 16,
+    fontSize: FontSize.medium,
     fontWeight: 'bold',
   },
   continueButton: {
-    backgroundColor: '#007BFF',
     borderRadius: 10,
     padding: 15,
     alignItems: 'center',
     marginBottom: 10,
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
+    fontSize: FontSize.medium,
     fontWeight: 'bold',
   },
   cancelText: {
-    fontSize: 14,
+    fontSize: FontSize.small,
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  lightTheme: {
-    container: { backgroundColor: '#fff' },
-    topSection: { backgroundColor: 'rgba(0, 123, 255, 0.3)' },
-    bottomSection: { backgroundColor: 'rgba(255, 255, 255, 0.9)' },
-    heading: { color: '#007BFF' },
-    subText: { color: 'rgba(0, 0, 0, 0.7)' },
-    currencySymbol: { color: '#007BFF' },
-    loanInput: { color: '#007BFF' },
-    tenureText: { color: '#007BFF' },
-    continueButton: { backgroundColor: '#007BFF' },
-    cancelText: { color: '#007BFF' },
-    progressText: { color: '#fff' },
-  },
-  darkTheme: {
-    container: { backgroundColor: '#121212' },
-    topSection: { backgroundColor: 'rgba(0, 123, 255, 0.5)' },
-    bottomSection: { backgroundColor: '#1C1C1C' },
-    heading: { color: '#007BFF' },
-    subText: { color: 'rgba(255, 255, 255, 0.7)' },
-    currencySymbol: { color: '#007BFF' },
-    loanInput: { color: '#007BFF' },
-    tenureText: { color: '#007BFF' },
-    continueButton: { backgroundColor: '#007BFF' },
-    cancelText: { color: '#007BFF' },
-    progressText: { color: '#007BFF' },
-  },
 });
 
-export default LoanScreen;
+export default LoanApplyScreen;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,27 +7,38 @@ import {
   ScrollView,
   useColorScheme,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons'; // Import Ionicons
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useSelector, useDispatch } from 'react-redux';
+import { theme, isDarkTheme } from '../Redux/AuthSlice'; 
+import { Colors } from '../constants/Colors';
 
-const BankDetailScreen = ({navigation}: any) => {
-  const scheme = useColorScheme();
+const BankDetailScreen = ({ navigation }: any) => {
+
+const colorScheme = useColorScheme();
+const dispatch = useDispatch();
+const isDarkMode = useSelector(isDarkTheme);
+
+useEffect(() => {
+  dispatch(theme(colorScheme)); 
+}, [colorScheme, dispatch]);
 
   return (
     <View
       style={[
         styles.container,
-        scheme === 'dark' ? styles.darkContainer : styles.lightContainer,
+        { backgroundColor: isDarkMode ? Colors.darkBackground : Colors.lightBackground },
       ]}>
       <View style={styles.topSection}>
-      
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()} 
+          onPress={() => navigation.goBack()}
         >
-          <Ionicons name="arrow-back" size={30} color="#fff" />
+          <Ionicons name="arrow-back" size={30} color={isDarkMode ? Colors.white : Colors.black} />
         </TouchableOpacity>
-        
-        <Text style={styles.topText}>Bank Details</Text>
+
+        <Text style={[styles.topText, { color: isDarkMode ? Colors.white : Colors.black }]}>
+          Bank Details
+        </Text>
       </View>
 
       <View style={styles.bottomSection}>
@@ -35,45 +46,40 @@ const BankDetailScreen = ({navigation}: any) => {
           <View
             style={[
               styles.card,
-              scheme === 'dark' ? styles.darkCard : styles.lightCard,
+              { backgroundColor: isDarkMode ? Colors.white: Colors.secondary },
             ]}>
-            <DetailRow label="Bank Name" value="ABC Bank" />
-            <DetailRow label="Account Holder Name" value="John Doe" />
-            <DetailRow label="Account Number" value="1234567890" />
-            <DetailRow label="IFSC Code" value="ABCD0123456" />
-            <DetailRow label="Customer ID" value="987654321" />
-            <DetailRow label="Debit Card Number" value="1234 5678 9012 3456" />
-            <DetailRow label="Mobile Number" value="+91 9876543210" />
-            <DetailRow label="Email" value="johndoe@example.com" />
+            <DetailRow label="Bank Name" value="ABC Bank" isDarkMode={isDarkMode} />
+            <DetailRow label="Account Holder Name" value="John Doe" isDarkMode={isDarkMode} />
+            <DetailRow label="Account Number" value="1234567890" isDarkMode={isDarkMode} />
+            <DetailRow label="IFSC Code" value="ABCD0123456" isDarkMode={isDarkMode} />
+            <DetailRow label="Customer ID" value="987654321" isDarkMode={isDarkMode} />
+            <DetailRow label="Debit Card Number" value="1234 5678 9012 3456" isDarkMode={isDarkMode} />
+            <DetailRow label="Mobile Number" value="+91 9876543210" isDarkMode={isDarkMode} />
+            <DetailRow label="Email" value="johndoe@example.com" isDarkMode={isDarkMode} />
             <DetailRow
               label="Address"
               value="123, Main Street, City, State, PIN"
+              isDarkMode={isDarkMode}
             />
-            <DetailRow label="Other Details" value="Net Banking Enabled" />
+            <DetailRow label="Other Details" value="Net Banking Enabled" isDarkMode={isDarkMode} />
 
             <TouchableOpacity
               style={[styles.button, styles.changeDetailsButton]}>
-              <Text style={styles.buttonText}>Change Details</Text>
+              <Text style={[styles.buttonText, { color: isDarkMode ? Colors.white : Colors.black }]}>
+                Change Details
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
 
         <View>
           <TouchableOpacity
-            style={[
-              styles.moveAheadButton,
-              scheme === 'dark' ? styles.darkButton : styles.lightButton,
-            ]}
+            style={[styles.moveAheadButton, { backgroundColor: isDarkMode ? Colors.white : Colors.black }]}
             onPress={() => {
               navigation.navigate('DocumentBank');
             }}>
             <Text
-              style={[
-                styles.moveAheadText,
-                scheme === 'dark'
-                  ? styles.darkMoveAheadText
-                  : styles.lightMoveAheadText,
-              ]}>
+              style={[styles.moveAheadText, { color: isDarkMode ? Colors.black : Colors.white }]}>
               Move Ahead
             </Text>
           </TouchableOpacity>
@@ -83,10 +89,14 @@ const BankDetailScreen = ({navigation}: any) => {
   );
 };
 
-const DetailRow = ({label, value}: any) => (
-  <Text style={styles.detailText}>
-    <Text style={styles.label}>{label}: </Text>
-    <Text style={styles.value}>{value}</Text>
+const DetailRow = ({ label, value, isDarkMode }: any) => (
+  <Text style={[styles.detailText, { color: isDarkMode ? Colors.white : Colors.black }]}>
+    <Text style={[styles.label, { color: isDarkMode ? Colors.accent : Colors.primary }]}>
+      {label}: 
+    </Text>
+    <Text style={[styles.value, { color: isDarkMode ? Colors.black : Colors.black }]}>
+      {value}
+    </Text>
   </Text>
 );
 
