@@ -7,10 +7,10 @@ import {
   ScrollView,
   useColorScheme,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useSelector, useDispatch } from 'react-redux';
 import { theme, isDarkTheme } from '../Redux/AuthSlice'; 
 import { Colors } from '../constants/Colors';
+import Header from '../constants/Header';
 
 const BankDetailScreen = ({ navigation }: any) => {
 
@@ -28,14 +28,11 @@ useEffect(() => {
         styles.container,
         { backgroundColor: isDarkMode ? Colors.darkBackground : Colors.lightBackground },
       ]}>
+           
       <View style={styles.topSection}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={30} color={isDarkMode ? Colors.white : Colors.black} />
-        </TouchableOpacity>
-
+      <View style={styles.headerWrapper}>
+          <Header navigation={navigation} />
+        </View>
         <Text style={[styles.topText, { color: isDarkMode ? Colors.white : Colors.black }]}>
           Bank Details
         </Text>
@@ -109,6 +106,13 @@ const styles = StyleSheet.create({
   },
   darkContainer: {
     backgroundColor: '#1e1e1e',
+  },
+  headerWrapper: {
+    position: 'absolute', 
+    top: 9,
+    left: 0,
+    right: 0,
+    
   },
   topSection: {
     flex: 0.2,

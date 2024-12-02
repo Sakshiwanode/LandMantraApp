@@ -2,9 +2,10 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, StyleSheet, useColorScheme } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import HomeScreen from '../screens/Dashboard/Home';
-import ActiveLoanScreen from '../screens/Dashboard/ActiveLoan';
-import ProfileScreen from '../screens/Dashboard/Profile';
+import HomeScreen from '../screens/Dashboard/Home/Home';
+
+import ProfileScreen from '../screens/Dashboard/Profile/Profile';
+import ActiveLoanScreen from '../screens/Dashboard/Active loans/ActiveLoan';
 
 const Tab = createBottomTabNavigator();
 

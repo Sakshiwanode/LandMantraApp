@@ -19,7 +19,8 @@ const Colors = {
   lightBackground: '#EDEDED', 
   darkInputBackground: '#333', 
   lightInputBackground: '#fff',
-
+  cardBackground: '#f9f9f9',
+  
   };
   
   const FontSize = {
@@ -30,7 +31,8 @@ const Colors = {
     xLarge: 20,
     xxLarge: 24,
     heading: 33,
-    HeadingXl:38,
+    headingxl:39,
+    headingxxl:42,
     subHeading: 24,
     description: 16,
   };

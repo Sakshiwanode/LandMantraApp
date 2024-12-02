@@ -1,68 +1,140 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, useColorScheme } from 'react-native';
-import { Appbar } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useEffect } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  StatusBar,
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { useColorScheme } from 'react-native';
+import { theme, isDarkTheme } from '../Redux/AuthSlice';
+import { Colors, FontSize } from '../constants/Colors';
+import Header from '../constants/Header';
 
 const DocumentBankScreen = ({ navigation }: any) => {
-  const [documents, setDocuments] = useState([
-    { id: '1', name: 'Cancel Signature' },
-    { id: '2', name: 'Clear' },
-  ]);
+  const dispatch = useDispatch();
+  const systemColorScheme = useColorScheme();
+  const isDarkMode = useSelector(isDarkTheme);
+
+  useEffect(() => {
+    dispatch(theme(systemColorScheme)); 
+  }, [systemColorScheme, dispatch]);
 
   const handleImageUpload = () => {
     console.log('Open file picker for document upload');
   };
 
-  const colorScheme = useColorScheme();
-  const themeStyles: any = colorScheme === 'dark' ? styles.dark : styles.light;
-
   return (
-    <View style={[styles.container, themeStyles.container]}>
-     
-      <Appbar.Header style={[themeStyles.appbar, { paddingTop: 0 }]}>
-        <MaterialCommunityIcons
-          name="arrow-left"
-          color={colorScheme === 'dark' ? '#fff' : '#000'} 
-          size={30}
-          onPress={() => navigation.goBack()}
-          style={styles.backArrow}
-        />
-      </Appbar.Header>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: isDarkMode ? Colors.darkBackground : Colors.lightBackground },
+      ]}
+    >
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
 
-    
-      <View style={themeStyles.topSection}>
+      <Header navigation={navigation}  />
+
+      {/* Top Section */}
+      <View style={styles.topSection}>
         <TouchableOpacity onPress={handleImageUpload}>
           <Image
             source={require('../images/BankDocument.png')}
-            style={themeStyles.uploadImage}
+            style={styles.image}
+            resizeMode="cover"
           />
         </TouchableOpacity>
-        <Text style={themeStyles.heading}>Document for Upload</Text>
-        <Text style={themeStyles.loremText}>
+        <Text
+          style={[
+            styles.heading,
+            { color: isDarkMode ? Colors.white : Colors.black },
+          ]}
+        >
+          Document for Upload
+        </Text>
+        <Text
+          style={[
+            styles.subtitle,
+            { color: isDarkMode ? Colors.placeholderDark : Colors.placeholderLight },
+          ]}
+        >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit facilisis lorem.
         </Text>
       </View>
 
-     
-      <View style={themeStyles.bottomSection}>
-        <View style={themeStyles.buttonRow}>
+      {/* Bottom Section */}
+      <View
+        style={[
+          styles.bottomSection,
+          { backgroundColor: isDarkMode ? Colors.darkInputBackground : Colors.lightInputBackground },
+        ]}
+      >
+      
+        <View style={styles.buttonRow}>
           <TouchableOpacity>
-            <Text style={themeStyles.flatListItem}>Signature</Text>
+            <Text
+              style={[
+                styles.flatListItem,
+                { color: isDarkMode ? Colors.white : Colors.black },
+              ]}
+            >
+              Signature
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Text style={themeStyles.flatListItem}>Clear</Text>
+            <Text
+              style={[
+                styles.flatListItem,
+                { color: isDarkMode ? Colors.white : Colors.black },
+              ]}
+            >
+              Clear
+            </Text>
           </TouchableOpacity>
         </View>
 
-        <View style={themeStyles.signatureBox}>
-          <Text style={themeStyles.signaturePlaceholder}></Text>
+       
+        <View
+          style={[
+            styles.signatureBox,
+            {
+              backgroundColor: isDarkMode ? Colors.mediumGray : Colors.lightGray,
+              borderColor: isDarkMode ? Colors.mediumGray : Colors.gray,
+            },
+          ]}
+        >
+          <Text
+            style={{
+              color: isDarkMode ? Colors.placeholderDark : Colors.placeholderLight,
+              fontSize: FontSize.medium,
+            }}
+          >
+            Add Signature Here
+          </Text>
         </View>
 
+        
         <TouchableOpacity
-          style={themeStyles.nextButton}
+          style={[
+            styles.nextButton,
+            { backgroundColor: isDarkMode ? Colors.black : Colors.primary ,
+              borderColor: isDarkMode ? Colors.blue : Colors.gray,
+            },
+          ]}
           onPress={() => navigation.navigate('ApplicationSubmit')}
         >
-          <Text style={themeStyles.nextButtonText}>Next</Text>
+          <Text
+            style={[
+              styles.nextButtonText,
+              { color: isDarkMode ? Colors.white : Colors.white,
+               
+               },
+            ]}
+          >
+            Next
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -73,172 +145,63 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  light: {
-    container: {
-      backgroundColor: 'rgb(205, 209, 228)',
-    },
-    appbar: {
-      backgroundColor: 'transparent',
-      height: 60,
-      justifyContent: 'center',
-    },
-    topSection: {
-      flex: 0.5,
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: 20,
-    },
-    uploadImage: {
-      width: 100,
-      height: 100,
-      marginBottom: 20,
-    },
-    heading: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginBottom: 10,
-      color: '#000',
-    },
-    loremText: {
-      textAlign: 'center',
-      fontSize: 14,
-      color: '#555',
-    },
-    bottomSection: {
-      flex: 0.5,
-      backgroundColor: '#fff',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      justifyContent: 'space-between',
-    },
-    flatListItem: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      marginVertical: 5,
-      color: '#333',
-      textAlign: 'center',
-    },
-    buttonRow: {
-      paddingLeft: 40,
-      paddingRight: 70,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: 10,
-    },
-    signatureBox: {
-      height: 200,
-      backgroundColor: '#f8f8f8',
-      borderRadius: 10,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderWidth: 1,
-      borderColor: '#ccc',
-      marginTop: -40,
-    },
-    signaturePlaceholder: {
-      color: '#aaa',
-      fontSize: 16,
-    },
-    nextButton: {
-      backgroundColor: '#007BFF',
-      paddingVertical: 12,
-      borderRadius: 10,
-      alignSelf: 'center',
-      width: '80%',
-      marginBottom: 60,
-    },
-    nextButtonText: {
-      color: '#fff',
-      textAlign: 'center',
-      fontSize: 16,
-      fontWeight: 'bold',
-    },
+ 
+  topSection: {
+    flex: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
   },
-  dark: {
-    container: {
-      backgroundColor: '#121212',
-    },
-    appbar: {
-      backgroundColor: 'transparent',
-      height: 60,
-      justifyContent: 'center',
-    },
-    topSection: {
-      flex: 0.5,
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: 20,
-    },
-    uploadImage: {
-      width: 100,
-      height: 100,
-      marginBottom: 20,
-    },
-    heading: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginBottom: 10,
-      color: '#fff',
-    },
-    loremText: {
-      textAlign: 'center',
-      fontSize: 14,
-      color: '#ddd',
-    },
-    bottomSection: {
-      flex: 0.5,
-      backgroundColor: '#312f2f',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      justifyContent: 'space-between',
-    },
-    flatListItem: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      marginVertical: 5,
-      color: '#ccc',
-      textAlign: 'center',
-    },
-    buttonRow: {
-      paddingLeft: 40,
-      paddingRight: 70,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: 10,
-    },
-    signatureBox: {
-      height: 200,
-      backgroundColor: '#C4C3D0',
-      borderRadius: 10,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderWidth: 1,
-      borderColor: '#555',
-      marginTop: -40,
-    },
-    signaturePlaceholder: {
-      color: '#aaa',
-      fontSize: 16,
-    },
-    nextButton: {
-      backgroundColor: '#007BFF',
-      paddingVertical: 12,
-      borderRadius: 10,
-      alignSelf: 'center',
-      width: '80%',
-      marginBottom: 60,
-    },
-    nextButtonText: {
-      color: '#fff',
-      textAlign: 'center',
-      fontSize: 16,
-      fontWeight: 'bold',
-    },
+  image: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
   },
-  backArrow: {
-    position: 'absolute',
-    left: 10,
-    top: -1, 
+  heading: {
+    fontSize: FontSize.xLarge,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  subtitle: {
+    textAlign: 'center',
+    fontSize: FontSize.medium,
+  },
+  bottomSection: {
+    flex: 0.5,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 80,
+  },
+  flatListItem: {
+    fontSize: FontSize.medium,
+    fontWeight: 'bold',
+  },
+  signatureBox: {
+    height: 200,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    marginTop: -40,
+  },
+  nextButton: {
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignSelf: 'center',
+    width: '80%',
+    marginTop: 60,
+    borderWidth:1,
+  },
+  nextButtonText: {
+    textAlign: 'center',
+    fontSize: FontSize.large,
+    fontWeight: 'bold',
   },
 });
 

@@ -1,19 +1,12 @@
+
+
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  StatusBar,
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, StatusBar } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useColorScheme } from 'react-native';
 import { theme, isDarkTheme } from '../Redux/AuthSlice';
-import { Appbar } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Colors, FontSize } from '../constants/Colors';
+import Header from '../constants/Header';
 
 const OTPScreen = ({ navigation }: any) => {
   const [otp, setOtp] = useState(['4', '5', '', '']);
@@ -27,62 +20,34 @@ const OTPScreen = ({ navigation }: any) => {
 
   return (
     <View
-      style={[
-        styles.container,
-        { backgroundColor: isDarkMode ? Colors.black : Colors.white },
-      ]}
+      style={[styles.container, { backgroundColor: isDarkMode ? Colors.white : Colors.white }]}
     >
       <StatusBar hidden />
-
-      <Appbar.Header
-        style={[
-          styles.header,
-          { backgroundColor: isDarkMode ? Colors.darkGray : Colors.lightGray },
-        ]}
-      >
-        <Appbar.Action
-          icon={() => (
-            <Icon
-              name="arrow-back"
-              size={24}
-              color={isDarkMode ? Colors.white : Colors.black}
-            />
-          )}
-          onPress={() => navigation.goBack()}
-        />
-      </Appbar.Header>
-
+     
       <View style={styles.topSection}>
         <Image
           source={require('../images/Otpverify.jpg')}
           style={styles.image}
           resizeMode="contain"
         />
+
+        <View style={styles.headerWrapper}>
+          <Header navigation={navigation} />
+        </View>
       </View>
 
       <View
-        style={[
-          styles.bottomSection,
-          {
-            backgroundColor: isDarkMode
-              ? Colors.darkBackground
-              : Colors.lightBackground,
-          },
-        ]}
+        style={[styles.bottomSection, {
+          backgroundColor: isDarkMode ? Colors.darkBackground : Colors.lightBackground,
+        }]}
       >
         <Text
-          style={[
-            styles.mainHeading,
-            { color: isDarkMode ? Colors.accent : Colors.primary },
-          ]}
+          style={[styles.mainHeading, { color: isDarkMode ? Colors.white : Colors.primary }]}
         >
           OTP Verification
         </Text>
         <Text
-          style={[
-            styles.subHeading,
-            { color: isDarkMode ? Colors.gray : Colors.secondary },
-          ]}
+          style={[styles.subHeading, { color: isDarkMode ? Colors.lightGray: Colors.black }]}
         >
           Enter the OTP sent to +91 111 333 222
         </Text>
@@ -93,14 +58,12 @@ const OTPScreen = ({ navigation }: any) => {
               key={index}
               style={[
                 styles.otpInput,
-                digit
-                  ? { borderColor: Colors.accent }
-                  : { borderColor: Colors.gray },
+                digit ? { borderColor: Colors.blue } : { borderColor: Colors.gray },
                 {
                   color: isDarkMode ? Colors.white : Colors.black,
                   backgroundColor: isDarkMode
-                    ? Colors.darkInputBackground
-                    : Colors.lightInputBackground,
+                    ? Colors.black
+                    : Colors.white,
                 },
               ]}
               keyboardType="numeric"
@@ -116,17 +79,11 @@ const OTPScreen = ({ navigation }: any) => {
         </View>
 
         <Text
-          style={[
-            styles.resendText,
-            { color: isDarkMode ? Colors.accent : Colors.primary },
-          ]}
+          style={[styles.resendText, { color: isDarkMode ? Colors.white : Colors.primary }]}
         >
           Didn’t receive the OTP?{' '}
           <Text
-            style={[
-              styles.boldText,
-              { color: isDarkMode ? Colors.accent : Colors.primary },
-            ]}
+            style={[styles.boldText, { color: isDarkMode ? Colors.primary : Colors.primary }]}
             onPress={() => console.log('Resend OTP')}
           >
             Resend OTP
@@ -134,19 +91,14 @@ const OTPScreen = ({ navigation }: any) => {
         </Text>
 
         <TouchableOpacity
-          style={[
-            styles.verifyButton,
-            {
-              backgroundColor: isDarkMode ? Colors.accent : Colors.primary,
-            },
-          ]}
+          style={[styles.verifyButton, {
+            backgroundColor: isDarkMode ? Colors.black : Colors.primary,
+            borderColor: isDarkMode ? Colors.blue : Colors.gray,
+          }]}
           onPress={() => navigation.navigate('LoanApply')}
         >
           <Text
-            style={[
-              styles.buttonText,
-              { color: isDarkMode ? Colors.black : Colors.white },
-            ]}
+            style={[styles.buttonText, { color: isDarkMode ? Colors.white : Colors.white }]}
           >
             Verify
           </Text>
@@ -160,17 +112,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    elevation: 0,
-  },
   topSection: {
     flex: 0.4,
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: 700,
+    height:700,
+  },
+  headerWrapper: {
+    position: 'absolute', 
+    top: 9,
+    left: 0,
+    right: 0,
   },
   bottomSection: {
     flex: 0.6,
@@ -179,8 +134,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   mainHeading: {
-    paddingTop:30,
-    fontSize: FontSize. HeadingXl,
+    paddingTop: 30,
+    fontSize: FontSize.headingxxl,
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -205,10 +160,10 @@ const styles = StyleSheet.create({
     fontSize: FontSize.large,
   },
   resendText: {
-    paddingBottom:20,
+    paddingBottom: 20,
     textAlign: 'center',
     fontSize: FontSize.small,
-    paddingTop:30,
+    paddingTop: 30,
   },
   boldText: {
     fontWeight: 'bold',
@@ -220,10 +175,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     alignSelf: 'center',
+    borderWidth:1,
   },
   buttonText: {
     fontSize: FontSize.medium,
     fontWeight: 'bold',
+    
   },
 });
 

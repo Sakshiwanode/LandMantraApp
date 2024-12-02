@@ -11,8 +11,8 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useColorScheme } from 'react-native';
 import { theme, isDarkTheme } from '../Redux/AuthSlice';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Colors, FontSize } from '../constants/Colors';
+import Header from '../constants/Header';
 
 const AadharScreen = ({ navigation }: any) => {
   const [isAadhar, setIsAadhar] = useState(true);
@@ -24,49 +24,44 @@ const AadharScreen = ({ navigation }: any) => {
   const isDarkMode = useSelector(isDarkTheme);
 
   useEffect(() => {
-    dispatch(theme(systemColorScheme)); // Apply the theme based on the system's color scheme
+    dispatch(theme(systemColorScheme)); 
   }, [systemColorScheme, dispatch]);
 
   return (
     <View
       style={[
         styles.container,
-        { backgroundColor: isDarkMode ? Colors.darkBackground : Colors.lightBackground },
+        { backgroundColor: isDarkMode ? Colors.white: Colors.lightBackground },
       ]}
     >
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.goBack()}
-      >
-        <Icon
-          name="arrow-back"
-          size={30}
-          color={isDarkMode ? Colors.white : Colors.black}
-        />
-      </TouchableOpacity>
+     
 
       <View style={styles.topSection}>
+
         <Image
           source={require('../images/adharotp.png')}
           style={styles.image}
           resizeMode="cover"
         />
+         <View style={styles.headerWrapper}>
+          <Header navigation={navigation} />
+        </View>
       </View>
 
       <View
         style={[
           styles.bottomSection,
           {
-            backgroundColor: isDarkMode ? Colors.darkGray : Colors.primary,
+            backgroundColor: isDarkMode ? Colors.darkBackground : Colors.lightBackground,
           },
         ]}
       >
         <Text
           style={[
             styles.title,
-            { color: isDarkMode ? Colors.white : Colors.white },
+            { color: isDarkMode ? Colors.primary : Colors.primary },
           ]}
         >
           Verify Your Identity
@@ -74,7 +69,7 @@ const AadharScreen = ({ navigation }: any) => {
         <Text
           style={[
             styles.subtitle,
-            { color: isDarkMode ? Colors.lightGray : Colors.mediumGray },
+            { color: isDarkMode ? Colors.lightGray : Colors.black },
           ]}
         >
           Select your verification method and enter the details.
@@ -112,13 +107,14 @@ const AadharScreen = ({ navigation }: any) => {
               styles.inputField,
               {
                 backgroundColor: isDarkMode
-                  ? Colors.darkInputBackground
+                  ? Colors.black
                   : Colors.lightInputBackground,
                 color: isDarkMode ? Colors.white : Colors.black,
+                borderColor: isDarkMode ? Colors.blue : Colors.gray,
               },
             ]}
             placeholder={isAadhar ? 'Enter your 12-digit Aadhar number' : 'Enter your 10-digit PAN number'}
-            placeholderTextColor={isDarkMode ? Colors.placeholderDark : Colors.placeholderLight}
+            placeholderTextColor={isDarkMode ? Colors.white: Colors.placeholderLight}
             keyboardType="numeric"
             maxLength={isAadhar ? 12 : 10}
             value={aadharOrPanNumber}
@@ -127,7 +123,9 @@ const AadharScreen = ({ navigation }: any) => {
         </View>
 
         <TouchableOpacity
-          style={[styles.submitButton, { backgroundColor: isDarkMode ? Colors.accent : Colors.primary }]}
+          style={[styles.submitButton, { backgroundColor: isDarkMode ? Colors.black : Colors.primary ,
+            borderColor: isDarkMode ? Colors.blue : Colors.gray,
+          }]}
           onPress={() => {
             if (isAadhar) {
               navigation.navigate('AadharVerificationSuccess');
@@ -138,7 +136,10 @@ const AadharScreen = ({ navigation }: any) => {
           }}
         >
           <Text
-            style={[styles.submitButtonText, { color: isDarkMode ? Colors.black : Colors.white }]}
+            style={[styles.submitButtonText,
+               { color: isDarkMode ? Colors.white : Colors.white,
+             
+             }]}
           >
             Verify
           </Text>
@@ -152,12 +153,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  backButton: {
-    position: 'absolute',
-    top: 40,
-    left: 20,
-    zIndex: 1,
-  },
+  
   topSection: {
     flex: 0.6,
     justifyContent: 'center',
@@ -167,6 +163,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  headerWrapper: {
+    position: 'absolute', 
+    top: 9,
+    left: 0,
+    right: 0,
+  },
   bottomSection: {
     flex: 0.4,
     borderTopLeftRadius: 30,
@@ -175,24 +177,27 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
   },
   title: {
-    fontSize: FontSize.xLarge,
+    fontSize: FontSize.heading,
     fontWeight: 'bold',
   },
   subtitle: {
     fontSize: FontSize.medium,
     color: Colors.mediumGray,
+    padding:10,
+    paddingLeft:1,
   },
   verificationToggle: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
+    
   },
   toggleButton: {
     backgroundColor: 'transparent',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: Colors.primary,
     borderRadius: 20,
     marginHorizontal: 10,
   },
@@ -200,7 +205,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   toggleButtonText: {
-    color: '#fff',
+    color: '#5a5757',
     fontSize: 16,
   },
   activeButtonText: {
@@ -210,8 +215,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   inputLabel: {
-    fontSize: FontSize.small,
-    color: '#777',
+    fontSize: FontSize.large,
+    color: Colors.primary,
   },
   inputField: {
     height: 50,
@@ -222,8 +227,9 @@ const styles = StyleSheet.create({
     fontSize: FontSize.medium,
   },
   submitButton: {
-    padding: 15,
-    borderRadius: 10,
+    padding: 13,
+    borderWidth: 1,
+    borderRadius: 8,
     alignItems: 'center',
     marginTop: 30,
   },

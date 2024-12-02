@@ -11,9 +11,9 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { useColorScheme } from 'react-native';
 import { theme, isDarkTheme } from '../Redux/AuthSlice';
-import { Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Colors, FontSize } from '../constants/Colors';
+import Header from '../constants/Header';
 
 const LoanApplyScreen = ({ navigation }: any) => {
   const [loanAmount, setLoanAmount] = useState(40000);
@@ -35,23 +35,6 @@ const LoanApplyScreen = ({ navigation }: any) => {
     >
       <StatusBar hidden />
 
-      <Appbar.Header
-        style={[
-          styles.header,
-          { backgroundColor: isDarkMode ? Colors.darkGray : Colors.lightGray },
-        ]}
-      >
-        <Appbar.Action
-          icon={() => (
-            <Icon
-              name="arrow-left"
-              size={24}
-              color={isDarkMode ? Colors.white : Colors.black}
-            />
-          )}
-          onPress={() => navigation.goBack()}
-        />
-      </Appbar.Header>
 
       <View style={styles.topSection}>
         <Image
@@ -59,6 +42,9 @@ const LoanApplyScreen = ({ navigation }: any) => {
           style={styles.image}
           resizeMode="contain"
         />
+         <View style={styles.headerWrapper}>
+          <Header navigation={navigation} />
+        </View>
       </View>
 
       <View
@@ -74,7 +60,7 @@ const LoanApplyScreen = ({ navigation }: any) => {
         <Text
           style={[
             styles.mainHeading,
-            { color: isDarkMode ? Colors.accent : Colors.primary },
+            { color: isDarkMode ? Colors.primary : Colors.primary },
           ]}
         >
           Select Loan Amount
@@ -82,20 +68,20 @@ const LoanApplyScreen = ({ navigation }: any) => {
         <Text
           style={[
             styles.subHeading,
-            { color: isDarkMode ? Colors.white : Colors.secondary },
+            { color: isDarkMode ? Colors.white : Colors.black },
           ]}
         >
           Enter the loan amount you wish to apply for
         </Text>
 
         <View style={styles.inputContainer}>
-          <Text style={[styles.currencySymbol, { color: isDarkMode ? Colors.accent : Colors.primary }]}>
+          <Text style={[styles.currencySymbol, { color: isDarkMode ? Colors.white : Colors.black}]}>
             ₹
           </Text>
           <TextInput
             style={[
               styles.loanInput,
-              { color: isDarkMode ? Colors.accent : Colors.primary },
+              { color: isDarkMode ? Colors.white : Colors.black },
             ]}
             keyboardType="numeric"
             value={String(loanAmount)}
@@ -109,7 +95,7 @@ const LoanApplyScreen = ({ navigation }: any) => {
         </View>
 
         <View style={styles.progressContainer}>
-          <Text style={[styles.progressText, { color: isDarkMode ? Colors.accent : Colors.primary }]}>₹100</Text>
+          <Text style={[styles.progressText, { color: isDarkMode ? Colors.white : Colors.black }]}>₹100</Text>
           <View style={styles.progressBarWrapper}>
             <View
               style={[
@@ -118,7 +104,7 @@ const LoanApplyScreen = ({ navigation }: any) => {
               ]}
             />
           </View>
-          <Text style={[styles.progressText, { color: isDarkMode ? Colors.accent : Colors.primary }]}>
+          <Text style={[styles.progressText, { color: isDarkMode ? Colors.white : Colors.black }]}>
             ₹{maxLoan.toLocaleString()}
           </Text>
         </View>
@@ -126,7 +112,7 @@ const LoanApplyScreen = ({ navigation }: any) => {
         <Text
           style={[
             styles.mainHeading,
-            { color: isDarkMode ? Colors.accent : Colors.primary },
+            { color: isDarkMode ? Colors.primary : Colors.primary },
           ]}
         >
           Select Loan Tenure
@@ -134,7 +120,7 @@ const LoanApplyScreen = ({ navigation }: any) => {
         <Text
           style={[
             styles.subHeading,
-            { color: isDarkMode ? Colors.white : Colors.secondary },
+            { color: isDarkMode ? Colors.white : Colors.black },
           ]}
         >
           Choose your loan in terms of months, year
@@ -148,13 +134,14 @@ const LoanApplyScreen = ({ navigation }: any) => {
           style={[
             styles.continueButton,
             {
-              backgroundColor: isDarkMode ? Colors.accent : Colors.primary,
+              backgroundColor: isDarkMode ? Colors.black : Colors.primary,
+              borderColor: isDarkMode ? Colors.blue : Colors.gray,
             },
           ]}
           onPress={() => navigation.navigate('AadharVerify')}
         >
           <Text
-            style={[styles.buttonText, { color: isDarkMode ? Colors.black : Colors.white }]}
+            style={[styles.buttonText, { color: isDarkMode ? Colors.white : Colors.white }]}
           >
             Continue to Apply
           </Text>
@@ -188,8 +175,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: 470,
+    height: 400,
+  },
+  headerWrapper: {
+    position: 'absolute', 
+    top: 9,
+    left: 0,
+    right: 0,
   },
   bottomSection: {
     flex: 0.6,
@@ -198,7 +191,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   mainHeading: {
-    fontSize: FontSize.xLarge,
+    fontSize: FontSize.heading,
     fontWeight: 'bold',
     marginBottom: 10,
   },
@@ -268,13 +261,14 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: 'center',
     marginBottom: 10,
+    borderWidth:1,
   },
   buttonText: {
-    fontSize: FontSize.medium,
+    fontSize: FontSize.large,
     fontWeight: 'bold',
   },
   cancelText: {
-    fontSize: FontSize.small,
+    fontSize: FontSize.medium,
     fontWeight: 'bold',
     textAlign: 'center',
   },

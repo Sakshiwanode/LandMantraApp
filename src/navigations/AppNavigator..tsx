@@ -10,6 +10,7 @@ import BankDetailScreen from '../screens/BankDetail';
 import DocumentBankScreen from '../screens/DocumentBank';
 import ApplicationSubmit from '../screens/ApplicationSubmit';
 import MainTabNavigator from './TabNavigator';
+import ApplyNewLoanScreen from '../screens/Dashboard/Home/ApplyNewLoan';
 
 
 const Stack = createNativeStackNavigator();
@@ -64,6 +65,12 @@ const AppNavigator = () => {
           component={MainTabNavigator} 
           options={{ headerShown: false }} 
         />
+        <Stack.Screen 
+          name="ApplyNewLoan"
+          component={ApplyNewLoanScreen} 
+          options={{ headerShown: false }} 
+        />
+
 
 
 
